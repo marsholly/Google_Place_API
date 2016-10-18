@@ -26,6 +26,10 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  res.handle = (err, data) => res.status(err ? 400 : 200).send(err || data);
+  next();
+});
 
 // ROUTES
 app.use('/api', require('./routes/api'));
@@ -38,5 +42,5 @@ app.get('*', (req, res) => {
 // SERVER LISTEN
 server.listen(PORT, (err) => {
   if (err) throw err;
-    console.log(`Server listening at http://localhost:${PORT}`);
+  console.log(`Server listening at http://localhost:${PORT}`);
 });
