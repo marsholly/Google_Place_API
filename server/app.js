@@ -27,7 +27,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
-  res.handle = (err, data) => res.status(err ? 400 : 200).send(err || data);
+  const resRef = res;
+  resRef.handle = (err, data) => resRef.status(err ? 400 : 200).send(err || data);
   next();
 });
 
@@ -42,5 +43,5 @@ app.get('*', (req, res) => {
 // SERVER LISTEN
 server.listen(PORT, (err) => {
   if (err) throw err;
-  console.log(`Server listening at http://localhost:${PORT}`);
+  process.stdout.write(`Server listening at http://localhost:${PORT}`);
 });
